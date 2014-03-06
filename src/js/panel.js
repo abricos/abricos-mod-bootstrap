@@ -8,23 +8,16 @@
 
 var Component = new Brick.Component();
 Component.requires = {
-    mod: [
-        // {name: 'sys', files: ['container.js']}
-    ],
     yui: ['panel']
 };
 Component.entryPoint = function (NS) {
 
     var Y = Brick.YUI,
-        Widget = Y.Widget,
-        buildTemplate = this.buildTemplate,
 
         BOUNDING_BOX = 'boundingBox',
         CONTENT_BOX = 'contentBox',
 
         RENDERUI = "renderUI",
-        BINDUI = "bindUI",
-        SYNCUI = "syncUI",
 
         getClassName = Y.ClassNameManager.getClassName;
 
@@ -36,7 +29,7 @@ Component.entryPoint = function (NS) {
         footer: 'modal-footer'
     };
     Bootstrap.TEMPLATES = {
-        closeButton: '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>',
+        closeButton: '<button type="button" class="close">&times;</button>',
         header: '<div class="modal-header"></div>',
         body: '<div class="modal-body"></div>',
         footer: '<div class="modal-footer"></div>'
@@ -85,13 +78,11 @@ Component.entryPoint = function (NS) {
         },
         _afterVisibleChange: function(event){
             this.destroy();
-           // Y.soon(Y.bind('destroy', this));
         }
     };
-    NS.WidgetBootstrapPanel = Bootstrap;
+    NS.WidgetBootstrap = Bootstrap;
 
-    Y.MyPanel = Y.Base.create('modal', Y.Widget, [
-        // Other Widget extensions depend on these two.
+    NS.Panel = Y.Base.create('panel', Y.Widget, [
         Y.WidgetPosition,
         Y.WidgetStdMod,
 
@@ -101,32 +92,6 @@ Component.entryPoint = function (NS) {
         Y.WidgetPositionAlign,
         Y.WidgetPositionConstrain,
         Y.WidgetStack,
-        NS.WidgetBootstrapPanel
-    ], {
-
-
-        /*
-         BUTTONS: {
-         close: {
-         // label: '&times;',
-         action: 'hide',
-         section: 'header',
-
-         // Uses `type="button"` so the button's default action can still
-         // occur but it won't cause things like a form to submit.
-         template: '<button type="button" data-dismiss="modal" aria-hidden="true">&times;</button>',
-         classNames: 'close'
-         }
-         }/**/
-    }, {
-
-        /*
-         ATTRS: {
-         // TODO: API Docs.
-         buttons: {
-         value: ['close']
-         }
-         }
-         /**/
-    });
+        NS.WidgetBootstrap
+    ]);
 };
