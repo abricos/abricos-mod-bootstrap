@@ -1,5 +1,5 @@
 /*!
- * Bootstrap Module for Abricos Platform
+ * BootstrapModal Module for Abricos Platform
  * http://abricos.org
  *
  * Copyright 2014 Alexander Kuzmin <roosit@abricos.org>
@@ -8,11 +8,16 @@
 
 var Component = new Brick.Component();
 Component.requires = {
-    yui: ['panel']
+    yui: ['panel', 'widget'],
+    mod: [
+        {name: 'sys', files: ['component.js']}
+    ]
 };
-Component.entryPoint = function (NS) {
+Component.entryPoint = function(NS){
 
     var Y = Brick.YUI,
+
+        SYS = Brick.mod.sys,
 
         BOUNDING_BOX = 'boundingBox',
         CONTENT_BOX = 'contentBox',
@@ -21,22 +26,22 @@ Component.entryPoint = function (NS) {
 
         getClassName = Y.ClassNameManager.getClassName;
 
-    var Bootstrap = function () {
+    var BootstrapModal = function(){
     };
-    Bootstrap.SECTION_CLASS_NAMES = {
+    BootstrapModal.SECTION_CLASS_NAMES = {
         header: 'modal-header',
         body: 'modal-body',
         footer: 'modal-footer'
     };
-    Bootstrap.TEMPLATES = {
+    BootstrapModal.TEMPLATES = {
         closeButton: '<button type="button" class="close">&times;</button>',
         header: '<div class="modal-header"></div>',
         body: '<div class="modal-body"></div>',
         footer: '<div class="modal-footer"></div>'
     };
-    Bootstrap.prototype = {
+    BootstrapModal.prototype = {
 
-        initializer: function () {
+        initializer: function(){
             this._bootsNode = this.get(CONTENT_BOX);
 
             this._uiSetStdModOrigin = this._uiSetStdMod;
@@ -46,7 +51,7 @@ Component.entryPoint = function (NS) {
 
             this.after('visibleChange', this._afterVisibleChange);
         },
-        _renderUIBootstrap: function () {
+        _renderUIBootstrap: function(){
             var cbox = this.get(CONTENT_BOX);
             cbox.replaceClass(getClassName('panel-content'), 'modal-content');
 
@@ -55,34 +60,72 @@ Component.entryPoint = function (NS) {
 
             var modal = this.get('modal');
             if (modal){
-                this.set('zIndex', 1000);
+                this.set('zIndex', 10000);
             }
         },
-        _getStdModTemplate: function (section) {
-            return Y.Node.create(Bootstrap.TEMPLATES[section], this._stdModNode.get('ownerDocument'));
+        _getStdModTemplate: function(section){
+            return Y.Node.create(BootstrapModal.TEMPLATES[section], this._stdModNode.get('ownerDocument'));
         },
-        _findStdModSection: function (section) {
-            return this.get(CONTENT_BOX).one("> ." + Bootstrap.SECTION_CLASS_NAMES[section]);
+        _findStdModSection: function(section){
+            return this.get(CONTENT_BOX).one("> ." + BootstrapModal.SECTION_CLASS_NAMES[section]);
         },
         _uiSetStdModBootstrap: function(section, content, where){
             this._uiSetStdModOrigin(section, content, where);
             if (section === 'header'){
                 var node = this.getStdModNode(section);
-                var btnNode = Y.Node.create(Bootstrap.TEMPLATES.closeButton);
-                node.appendChild(btnNode);
-                var __self = this;
-                btnNode.once('click', function(event){
-                    __self.hide();
-                });
+                if (node){
+                    var btnNode = Y.Node.create(BootstrapModal.TEMPLATES.closeButton);
+                    node.appendChild(btnNode);
+                    var __self = this;
+                    btnNode.once('click', function(event){
+                        __self.hide();
+                    });
+                }
             }
         },
         _afterVisibleChange: function(event){
             this.destroy();
         }
     };
-    NS.WidgetBootstrap = Bootstrap;
+    NS.BootstrapModal = BootstrapModal;
+
+    var PanelTemplate = function(){
+    };
+    PanelTemplate.NAME = 'template';
+    PanelTemplate.prototype = {
+        initializer: function(){
+
+            console.log(this.template);
+
+            // Y.after(this._renderUIAfterPanelTemplate, this, RENDERUI);
+            // Y.before(this._renderUIBeforePanelTemplate, this, RENDERUI);
+
+        },
+        _renderUIBeforePanelTemplate: function(){
+            console.log('_renderUIBeforePanelTemplate');
+        },
+        _renderUIAfterPanelTemplate: function(){
+            console.log('_renderUIAfterPanelTemplate');
+            /*
+             var cbox = this.get(CONTENT_BOX);
+             cbox.replaceClass(getClassName('panel-content'), 'modal-content');
+
+             var bbox = this.get(BOUNDING_BOX);
+             bbox.setStyle('position', 'absolute');
+
+             var modal = this.get('modal');
+             if (modal){
+             this.set('zIndex', 10000);
+             }
+             /**/
+        }
+    };
+    NS.PanelTemplate = PanelTemplate;
 
     NS.Panel = Y.Base.create('panel', Y.Widget, [
+        SYS.Template,
+        NS.PanelTemplate,
+
         Y.WidgetPosition,
         Y.WidgetStdMod,
 
@@ -92,6 +135,6 @@ Component.entryPoint = function (NS) {
         Y.WidgetPositionAlign,
         Y.WidgetPositionConstrain,
         Y.WidgetStack,
-        NS.WidgetBootstrap
+        NS.BootstrapModal
     ]);
 };

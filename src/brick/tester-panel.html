@@ -1,0 +1,40 @@
+<!--[*]
+
+[*]-->
+<div class="aw-boostrap" class="">
+    <h4>Bootstrap Panel</h4>
+
+    <!--
+    <div id="testpanel" class="panel panel-default">
+        <div class="panel-heading">
+            Заголовок
+        </div>
+        <div class="panel-body">
+            Тестовая панель!
+        </div>
+    </div>
+    -->
+</div>
+
+<script>
+
+    Brick.f('bootstrap', 'tester', function(){
+
+        var NS = Brick.mod.bootstrap;
+        var panel = new NS.TestDialog();
+        panel.render();
+
+        /*
+        new NS.Panel({
+            // boundingBox: '#testpanel',
+
+            bodyContent: '<div class="message icon-warn">Are you sure you want to [take some action]?</div>',
+            headerContent: 'asdfasdf',
+            modal: true,
+            centered: true,
+            render: true
+        });
+        /**/
+    });
+
+</script>
