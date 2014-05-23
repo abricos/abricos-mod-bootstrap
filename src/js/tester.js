@@ -22,8 +22,11 @@ Component.entryPoint = function(NS){
     NS._TestDialog = _TestDialog;
 
     NS.TestDialog = Y.Base.create('testDialog', NS.Panel, [
-        // SYS.Template
+        SYS.Language
     ], {
+        initializer: function(){
+            console.log(this);
+        }
     }, {
         ATTRS: {
             component: {
@@ -31,6 +34,9 @@ Component.entryPoint = function(NS){
             },
             templateBlockName: {
                 value: 'testdialog,list,item'
+            },
+            width: {
+                value: 400
             }
         }
     });

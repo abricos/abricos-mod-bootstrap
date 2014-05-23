@@ -95,29 +95,29 @@ Component.entryPoint = function(NS){
     PanelTemplate.prototype = {
         initializer: function(){
 
-            console.log(this.template);
+            if (!this.template){
+                Y.error('PanelTemplate must be set Template class');
+                return;
+            }
 
-            // Y.after(this._renderUIAfterPanelTemplate, this, RENDERUI);
-            // Y.before(this._renderUIBeforePanelTemplate, this, RENDERUI);
+            var tName = this.template.cfg.defTName;
 
-        },
-        _renderUIBeforePanelTemplate: function(){
-            console.log('_renderUIBeforePanelTemplate');
-        },
-        _renderUIAfterPanelTemplate: function(){
-            console.log('_renderUIAfterPanelTemplate');
-            /*
-             var cbox = this.get(CONTENT_BOX);
-             cbox.replaceClass(getClassName('panel-content'), 'modal-content');
+            var node = Y.Node.create(this.template.replace(tName));
 
-             var bbox = this.get(BOUNDING_BOX);
-             bbox.setStyle('position', 'absolute');
+            var nodeHeader = node.one('.hd');
+            if (nodeHeader){
+                this.set('headerContent', nodeHeader.getHTML());
+            }
 
-             var modal = this.get('modal');
-             if (modal){
-             this.set('zIndex', 10000);
-             }
-             /**/
+            var nodeBody = node.one('.bd');
+            if (nodeBody){
+                this.set('bodyContent', nodeBody.getHTML());
+            }
+
+            var nodeFooter = node.one('.ft');
+            if (nodeFooter){
+                this.set('footerContent', nodeFooter.getHTML());
+            }
         }
     };
     NS.PanelTemplate = PanelTemplate;

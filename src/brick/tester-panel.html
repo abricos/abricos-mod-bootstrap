@@ -21,7 +21,9 @@
     Brick.f('bootstrap', 'tester', function(){
 
         var NS = Brick.mod.bootstrap;
-        var panel = new NS.TestDialog();
+        var panel = new NS.TestDialog({
+            centered: true
+        });
         panel.render();
 
         /*
